@@ -7,3 +7,4 @@ gem "pry"
 gem "require_all"
 gem "tty-prompt"
 gem "faker"
+gem 'ruby_figlet', '~> 0.6.1'

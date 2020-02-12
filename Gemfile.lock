@@ -34,6 +34,7 @@ GEM
     rack-protection (2.0.7)
       rack
     require_all (1.3.3)
+    ruby_figlet (0.6.1)
     sinatra (2.0.7)
       mustermann (~> 1.0)
       rack (~> 2.0)
@@ -68,6 +69,7 @@ DEPENDENCIES
   faker
   pry
   require_all
+  ruby_figlet (~> 0.6.1)
   sinatra-activerecord
   sqlite3
   tty-prompt
