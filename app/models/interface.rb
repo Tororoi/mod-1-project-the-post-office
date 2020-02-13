@@ -191,12 +191,12 @@ def welcome
                     system "clear"
                     friend = Receiver.find_by(name: recipient_choice)
                     letters_to_recipient = friend.letters.map do |letter|
-                        letter.content
+                        {name: letter.content, value: letter}
                     end
 
                     view_letter = prompt.select("Please choose a letter:", letters_to_recipient)
                     if view_letter
-                        display_letter(view_letter)
+                        display_letter(view_letter.content)
                         letter_menu = prompt.select("What would you like to do?") do |menu|
                             menu.choice "Delete Letter"
                             menu.choice "Return to Main Menu"
@@ -215,9 +215,9 @@ def welcome
         end
 
 
-        def mail_delete(words)
-            item = Letter.find_by(content: words)
-            Letter.destroy(item.id)
+        def mail_delete(letter)
+            # item = Letter.find_by(content: words)
+            Letter.destroy(letter.id)
             # Letter.where(content: words).destroy_all
             puts "\nYou chased after the mailman and tackled him to the ground. You got your letter back and burned it."
         end
@@ -248,6 +248,18 @@ def welcome
         end
         
         def my_address_book
-        end
+            puts "My Address Book"
+            my_outbox = Letter.all.select do |my_letter|
+                my_letter.sender == sender
+            end
+            recipients = my_outbox.map do |letter|
+                letter.receiver
+            end.uniq
+            recipients.each do |recipient|
+                puts "\nName: #{recipient.name}"
+                puts "Address: #{recipient.address}"
+            end
+            main_menu
+        end 
 
 end
