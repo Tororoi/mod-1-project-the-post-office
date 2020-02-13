@@ -8,3 +8,4 @@ gem "require_all"
 gem "tty-prompt"
 gem "faker"
 gem 'ruby_figlet', '~> 0.6.1'
+gem 'colorize', '~> 0.8.1'

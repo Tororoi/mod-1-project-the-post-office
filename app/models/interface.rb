@@ -1,4 +1,6 @@
 require "tty-prompt"
+require 'colorize'
+require 'colorized_string'
 require "ruby_figlet"
 using RubyFiglet # For String.new(...).art / .art! Moneky Patches
 
@@ -19,6 +21,11 @@ class Interface
 
 
 ###################################*** WELCOME ***#######################################
+def banner
+    header = "The  Post  Office".art! 'alligator'
+    puts header
+    puts "\n"
+end
 
 def welcome
     # display_post_office - displays banner
@@ -26,10 +33,8 @@ def welcome
       welcome.each_char {|c| putc c ; sleep 0.10; $stdout.flush }
       "....".each_char {|c| putc c ; sleep 0.4; $stdout.flush }
       system "clear"
-      puts "The  Post  Office".art! 'alligator'
+      banner
       sleep 0.5
-      puts ""
-      puts "Whaddya want??"
   end
 
 ###################################*** MAIN MENU ***#######################################
@@ -61,6 +66,7 @@ def welcome
 
         def menu
             system "clear"
+            banner
             puts "Hello, #{sender.name}!"
             option = prompt.select("\nHow can we help you today?") do |menu|
                 menu.choice 'Send a letter'
@@ -68,26 +74,23 @@ def welcome
                 menu.choice 'My Address Book'
                 menu.choice 'White Pages'
                 menu.choice 'Change My Address'
-                menu.choice "Exit 'The Post Office'"
+                menu.choice "Exit 'The Post Office'".colorize(:red)
             end
             
+            system "clear"
+            banner
+           
             if option == 'Send a letter'
-                system "clear"
                 letter
             elsif option == 'View Outbox'
-                system "clear"
                 view_outbox
             elsif option == 'My Address Book'
-                system "clear"
                 my_address_book
             elsif option == 'White Pages'
-                system "clear"
                 white_pages
             elsif option == 'Change My Address'
-                system "clear"
                 change_my_address
-            elsif option == "Exit 'The Post Office'"
-                system "clear"
+            elsif option == "Exit 'The Post Office'".colorize(:red)
                 puts "Thank you for visiting 'The Post Office', have a great day!"
                 sleep(2.0)
                 system "clear"
@@ -189,6 +192,7 @@ def welcome
 
                 if recipient_choice
                     system "clear"
+                    banner
                     friend = Receiver.find_by(name: recipient_choice)
                     letters_to_recipient = friend.letters.map do |letter|
                         {name: letter.content, value: letter}
@@ -198,22 +202,19 @@ def welcome
                     if view_letter
                         display_letter(view_letter.content)
                         letter_menu = prompt.select("What would you like to do?") do |menu|
-                            menu.choice "Delete Letter"
                             menu.choice "Return to Main Menu"
+                            menu.choice "Delete Letter"
                         end
 
                         if letter_menu == "Delete Letter"
                             mail_delete(view_letter)
+                            main_menu
                         else
                             menu
                         end
-
                     end
                 end
-
-            main_menu
         end
-
 
         def mail_delete(letter)
             # item = Letter.find_by(content: words)
@@ -234,7 +235,7 @@ def welcome
             sleep(2.0)
             system "clear"
             
-            menu
+            main_menu
         end
 
 
@@ -242,7 +243,6 @@ def welcome
             Receiver.all.each do |person|
                 puts "\nName: #{person.name}"
                 puts "Address: #{person.address}"
-                puts ""
             end
             main_menu
         end
