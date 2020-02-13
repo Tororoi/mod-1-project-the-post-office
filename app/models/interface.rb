@@ -173,8 +173,11 @@ def welcome
 
 
         def view_outbox
-            recipients = sender.letters.map do |recipient|
-                recipient.receiver.name
+            my_outbox = Letter.all.select do |letter|
+                letter.sender == sender
+            end
+            recipients = my_outbox.map do |letter|
+                letter.receiver.name
             end.uniq
 
             if sender.letters.length > 0
@@ -213,7 +216,9 @@ def welcome
 
 
         def mail_delete(words)
-            Letter.where(content: words).destroy_all
+            item = Letter.find_by(content: words)
+            Letter.destroy(item.id)
+            # Letter.where(content: words).destroy_all
             puts "\nYou chased after the mailman and tackled him to the ground. You got your letter back and burned it."
         end
 
@@ -244,4 +249,5 @@ def welcome
         
         def my_address_book
         end
+
 end
