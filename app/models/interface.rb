@@ -233,9 +233,7 @@ def welcome
             
             puts "Your new address is now: #{sender.address}"
             sleep(2.0)
-            system "clear"
-            
-            main_menu
+            menu
         end
 
 
