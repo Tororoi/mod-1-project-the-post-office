@@ -1,8 +1,7 @@
 ## The Post Office
 
 ## Instructions
-1. Fork and clone the repository off of the following link:
-    <https://github.com/Tororoi/mod-1-project-the-post-office>
+1. Fork and clone the repository off of this page
 2. Open Terminal and navigate to ‘ruby-project-guidelines-nyc04-seng-ft-012720’
 3. Open up the directory in Visual Studio Code
 4. Type ‘bundle install’ in Terminal and hit return
