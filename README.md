@@ -2,14 +2,14 @@
 
 ## Instructions
 1. Fork and clone the repository off of this page
-2. Open Terminal and navigate to ‘ruby-project-guidelines-nyc04-seng-ft-012720’
+2. Open Terminal and navigate to ‘mod-1-project-the-post-office’
 3. Open up the directory in Visual Studio Code
 4. Type ‘bundle install’ in Terminal and hit return
 5. Next, type ‘rake db:migrate’ in Terminal and hit return
 6. Finally, type ‘rake db:seed’ in Terminal and hit return
 
 ## How to Run ‘The Post Office’
-1. In terminal, while being in the ‘ruby-project-guidelines-nyc04-seng-ft-012720’ directory, type ‘ruby bin/run.rb’
+1. In terminal, while being in the ‘mod-1-project-the-post-office’ directory, type ‘ruby bin/run.rb’
 
 ## USER STORIES
 1. C - Create letters that can be sent to an existing receiver or a reciever that you input information for(name and address).
