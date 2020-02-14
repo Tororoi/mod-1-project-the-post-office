@@ -119,7 +119,7 @@ def welcome
             end
 
             puts "\nWrite your Message below:"
-            message = gets.chomp.capitalize
+            message = gets.chomp
             Letter.create(sender_id: sender.id, receiver_id: receiver_inst.id, content: message)
 
             puts "\nThank you for completing your message. #{receiver_name} should recieve your letter in 2-3 business days." 
@@ -176,44 +176,43 @@ def welcome
 
 
         def view_outbox
-            my_outbox = Letter.all.select do |letter|
-                letter.sender == sender
-            end
+            my_outbox = Letter.where({sender_id: sender.id})
             recipients = my_outbox.map do |letter|
                 letter.receiver.name
             end.uniq
 
-            if sender.letters.length > 0
-                recipient_choice = prompt.select("Please choose a receiver:", recipients)
+            if my_outbox.length > 0
+                recipient_choice = prompt.select("Please choose a recipient:", recipients)
             else
                 puts "Your outbox is currently empty."
                 main_menu
             end
 
-                if recipient_choice
-                    system "clear"
-                    banner
-                    friend = Receiver.find_by(name: recipient_choice)
-                    letters_to_recipient = friend.letters.map do |letter|
-                        {name: letter.content, value: letter}
+            if recipient_choice
+                system "clear"
+                banner
+                friend = Receiver.find_by(name: recipient_choice)
+                letters_to_friend = Letter.where({sender_id: sender.id, receiver_id: friend.id})
+                letters_to_recipient = letters_to_friend.map do |letter|
+                    {name: letter.content, value: letter}
+                end
+
+                view_letter = prompt.select("Please choose a letter:", letters_to_recipient)
+                if view_letter
+                    display_letter(view_letter.content)
+                    letter_menu = prompt.select("What would you like to do?") do |menu|
+                        menu.choice "Return to Main Menu"
+                        menu.choice "Delete Letter"
                     end
 
-                    view_letter = prompt.select("Please choose a letter:", letters_to_recipient)
-                    if view_letter
-                        display_letter(view_letter.content)
-                        letter_menu = prompt.select("What would you like to do?") do |menu|
-                            menu.choice "Return to Main Menu"
-                            menu.choice "Delete Letter"
-                        end
-
-                        if letter_menu == "Delete Letter"
-                            mail_delete(view_letter)
-                            main_menu
-                        else
-                            menu
-                        end
+                    if letter_menu == "Delete Letter"
+                        mail_delete(view_letter)
+                        main_menu
+                    else
+                        menu
                     end
                 end
+            end    
         end
 
         def mail_delete(letter)
@@ -247,9 +246,7 @@ def welcome
         
         def my_address_book
             puts "My Address Book"
-            my_outbox = Letter.all.select do |my_letter|
-                my_letter.sender == sender
-            end
+            my_outbox = Letter.where({sender_id: sender.id})
             recipients = my_outbox.map do |letter|
                 letter.receiver
             end.uniq
