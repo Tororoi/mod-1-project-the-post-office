@@ -4,6 +4,7 @@ class CreateLetters < ActiveRecord::Migration[5.0]
       t.integer :sender_id
       t.integer :receiver_id
       t.string :content
+      t.boolean :exists
     end
   end
 end

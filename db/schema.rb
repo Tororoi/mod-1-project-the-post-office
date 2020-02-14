@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 20200211164240) do
     t.integer "sender_id"
     t.integer "receiver_id"
     t.string  "content"
+    t.boolean "exists"
   end
 
   create_table "receivers", force: :cascade do |t|

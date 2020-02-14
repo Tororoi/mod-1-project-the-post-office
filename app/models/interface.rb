@@ -120,7 +120,7 @@ def welcome
 
             puts "\nWrite your Message below:"
             message = gets.chomp
-            Letter.create(sender_id: sender.id, receiver_id: receiver_inst.id, content: message)
+            Letter.create(sender_id: sender.id, receiver_id: receiver_inst.id, content: message, exists: true)
 
             puts "\nThank you for completing your message. #{receiver_name} should recieve your letter in 2-3 business days." 
             sleep(3.0)
@@ -176,7 +176,7 @@ def welcome
 
 
         def view_outbox
-            my_outbox = Letter.where({sender_id: sender.id})
+            my_outbox = Letter.where({sender_id: sender.id, exists: true})
             recipients = my_outbox.map do |letter|
                 {name: letter.receiver.name, value: letter.receiver}
             end.uniq
@@ -191,7 +191,7 @@ def welcome
             if recipient_choice
                 system "clear"
                 banner
-                letters_to_recipient = Letter.where({sender_id: sender.id, receiver_id: recipient_choice.id})
+                letters_to_recipient = Letter.where({sender_id: sender.id, receiver_id: recipient_choice.id, exists: true})
                 letters_to_recipient_hash = letters_to_recipient.map do |letter|
                     {name: letter.content, value: letter}
                 end
@@ -215,9 +215,8 @@ def welcome
         end
 
         def mail_delete(letter)
-            # item = Letter.find_by(content: words)
-            Letter.destroy(letter.id)
-            # Letter.where(content: words).destroy_all
+            # Letter.destroy(letter.id) #Hard delete
+            letter.update(exists: false) #Soft delete
             puts "\nYou chased after the mailman and tackled him to the ground. You got your letter back and burned it."
         end
 
