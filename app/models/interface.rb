@@ -178,7 +178,7 @@ def welcome
         def view_outbox
             my_outbox = Letter.where({sender_id: sender.id})
             recipients = my_outbox.map do |letter|
-                letter.receiver.name
+                {name: letter.receiver.name, value: letter.receiver}
             end.uniq
 
             if my_outbox.length > 0
@@ -191,13 +191,12 @@ def welcome
             if recipient_choice
                 system "clear"
                 banner
-                friend = Receiver.find_by(name: recipient_choice)
-                letters_to_friend = Letter.where({sender_id: sender.id, receiver_id: friend.id})
-                letters_to_recipient = letters_to_friend.map do |letter|
+                letters_to_recipient = Letter.where({sender_id: sender.id, receiver_id: recipient_choice.id})
+                letters_to_recipient_hash = letters_to_recipient.map do |letter|
                     {name: letter.content, value: letter}
                 end
 
-                view_letter = prompt.select("Please choose a letter:", letters_to_recipient)
+                view_letter = prompt.select("Please choose a letter:", letters_to_recipient_hash)
                 if view_letter
                     display_letter(view_letter.content)
                     letter_menu = prompt.select("What would you like to do?") do |menu|
